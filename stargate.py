@@ -1,6 +1,8 @@
 import database, main, menu as m, planeta as p
 from prettytable import PrettyTable
 
+confirmacao = "Aperte enter para continuar"
+
 class Stargate:
     def __init__(self, endereco, status_stargate, planeta):
         self.endereco = endereco
@@ -91,7 +93,7 @@ def processar_escolha(escolha, conexao):
             if len(resultado) > 1:
                 m.limpar_tela()
                 print("Mais de um planeta foi encontrado com esse nome, a inserção deverá ser feita por ID!")
-                input("Aperte enter para voltar ao menu")
+                input(confirmacao)
                 return
             else:
                 planeta = resultado[0].id_planeta
@@ -172,7 +174,7 @@ def buscar(conexao, parametro, valor):
     registros, erro = database.consulta(conexao, query, valor)
     if erro is not None:
         print("Ocorreu um erro na consulta:", erro)
-        input("Aperte enter para continuar")
+        input(confirmacao)
         return
 
     stargate_infos = [(Stargate(endereco, status_stargate, id_planeta), nome_planeta) for endereco, status_stargate, id_planeta, nome_planeta in registros]
@@ -191,9 +193,9 @@ def inserir(conexao, stargate):
     resultado = database.insercao(conexao, query, valores)
     if resultado is not True:
         print("Ocorreu um erro na inserção do stargate: ", resultado)
-        input("Aperte enter para continuar")
+        input(confirmacao)
         return
     
     print("\nStargate inserido com sucesso!")
-    input("Aperte enter para continuar")
+    input(confirmacao)
         
