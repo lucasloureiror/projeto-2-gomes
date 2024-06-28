@@ -1,6 +1,8 @@
 import database, main, menu as m
 from prettytable import PrettyTable
 
+confirmacao = "Aperte enter para continuar"
+
 class Planeta:
     def __init__(self, id_planeta, galaxia, sistema, nome, tipo, habitabilidade, status_planeta):
         self.id_planeta  = id_planeta
@@ -130,7 +132,7 @@ def listar(conexao):
     registros, erro = database.consulta(conexao, query, None)
     if erro is not None:
         print("Ocorreu um erro na listagem:", erro)
-        input("Aperte enter para continuar")
+        input(confirmacao)
         return
     planetas = [Planeta(*registro) for registro in registros]
     imprimir(planetas, None)
@@ -145,7 +147,7 @@ def buscar_planeta(conexao, parametro, valor):
     registros, erro = database.consulta(conexao, query, valor)
     if erro is not None:
         print("Ocorreu um erro na busca:", erro)
-        input("Aperte enter para continuar")
+        input(confirmacao)
         return
     planetas = [Planeta(*registro) for registro in registros]
     return planetas
@@ -159,11 +161,11 @@ def inserir_planeta(conexao, planeta):
     resultado = database.insercao(conexao, query, valores)
     if resultado is not True:
         print("Ocorreu um erro na inserção do planeta: ", resultado)
-        input("Aperte enter para continuar")
+        input(confirmacao)
         return
     
     print("\nPlaneta inserido com sucesso!")
-    input("Aperte enter para continuar")
+    input(confirmacao)
 
 
 def imprimir(planetas, fields):
