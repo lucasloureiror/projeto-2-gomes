@@ -2,17 +2,17 @@ set search_path to public;
 
 ------------------------------------------- GALAXIA -------------------------------------------
 create table Galaxia(
-	nome varchar(100) not null,
-	tipo varchar(9),
+	nome varchar2(100) not null,
+	tipo varchar2(9),
 	constraint PK_GALAXIA primary key(nome),
 	constraint CK_TIPO check(upper(tipo) in ('ELIPTICA', 'ESPIRAL', 'IRREGULAR'))
 );
 
 --------------------------------------- SISTEMA_ESTELAR ---------------------------------------
 create table Sistema_Estelar(
-	galaxia varchar(100) not null,
-	nome varchar(100) not null,
-	tipo varchar(20),
+	galaxia varchar2(100) not null,
+	nome varchar2(100) not null,
+	tipo varchar2(20),
 	constraint PK_SISTEMA primary key(galaxia, nome),
 	constraint FK_SISTEMA_GALAXIA foreign key(galaxia) references Galaxia(nome)
 		on update cascade on delete cascade
@@ -21,12 +21,12 @@ create table Sistema_Estelar(
 ------------------------------------------- PLANETA -------------------------------------------
 create table Planeta(
 	id_planeta int not null,
-	galaxia varchar(100) not null,
-	sistema varchar(100) not null,
-	nome varchar(100) not null,
-	tipo varchar(7),
-	habitabilidade varchar(20),
-	status_planeta varchar(20),
+	galaxia varchar2(100) not null,
+	sistema varchar2(100) not null,
+	nome varchar2(100) not null,
+	tipo varchar2(7),
+	habitabilidade varchar2(20),
+	status_planeta varchar2(20),
 	constraint PK_PLANETA primary key(id_planeta),
 	constraint UK_PLANETA_SISTEMA unique(galaxia, sistema, nome),
 	constraint FK_PLANETA_SISTEMA foreign key(galaxia, sistema) references Sistema_Estelar(galaxia, nome)
@@ -41,10 +41,10 @@ create sequence SEQ_PLANETA
 ------------------------------------------- RECURSO -------------------------------------------
 create table Recurso(
     planeta int not null,
-    codigo varchar(9) not null,
-    nome varchar(150),
-    abundancia varchar(20),
-    origem varchar(11) not null,
+    codigo varchar2(9) not null,
+    nome varchar2(150),
+    abundancia varchar2(20),
+    origem varchar2(11) not null,
     constraint PK_RECURSO primary key(planeta, codigo),
     constraint FK_RECURSO_PLANETA foreign key(planeta) references Planeta(id_planeta) 
     	on update cascade on delete cascade,
@@ -54,7 +54,7 @@ create table Recurso(
 ------------------------------------------ STARGATE -------------------------------------------
 create table Stargate(
 	endereco char(8) not null,
-	status_stargate varchar(20),
+	status_stargate varchar2(20),
 	planeta int,
 	constraint PK_STARGATE primary key(endereco),
 	constraint UK_STARGATE_PLANETA unique(planeta),
@@ -83,7 +83,7 @@ create table Conexao(
 create table Remessa(
 	data_hora_envio timestamp not null,
 	planeta int not null,
-	recurso varchar(9) not null,
+	recurso varchar2(9) not null,
 	data_hora_conexao timestamp not null,
 	origem_conexao char(8) not null,
 	quantidade int,
@@ -103,21 +103,21 @@ create table Remessa(
 
 ----------------------------------------- CIVILIZACAO -----------------------------------------
 create table Civilizacao(
-	nome varchar(100) not null,
-	lingua varchar(20),
-	nivel_tecnologico varchar(20),
-	nivel_agressividade varchar(20),
-	status_civilizacao varchar(20),
+	nome varchar2(100) not null,
+	lingua varchar2(20),
+	nivel_tecnologico varchar2(20),
+	nivel_agressividade varchar2(20),
+	status_civilizacao varchar2(20),
 	constraint PK_CIVILIZACAO primary key(nome)
 );
 
 ------------------------------------------- ESPECIE -------------------------------------------
 create table Especie(
-	nome varchar(100) not null,
-	civilizacao varchar(100) not null,
-	forma_locomocao varchar(20),
-	simetria varchar(12),
-	alimentacao varchar(9),
+	nome varchar2(100) not null,
+	civilizacao varchar2(100) not null,
+	forma_locomocao varchar2(20),
+	simetria varchar2(12),
+	alimentacao varchar2(9),
 	constraint PK_ESPECIE primary key(nome),
 	constraint UK_ESPECIE_CIVILIZACAO unique(civilizacao),
 	constraint FK_ESPECIE_CIVILIZACAO foreign key(civilizacao) references Civilizacao(nome)
@@ -129,10 +129,10 @@ create table Especie(
 
 ---------------------------------- CIVILIZACAO_VIVE_PLANETA -----------------------------------
 create table Civilizacao_vive_Planeta(
-	civilizacao varchar(100) not null,
+	civilizacao varchar2(100) not null,
 	planeta int not null,
-	localizacao varchar(50),
-	populacao varchar(20),
+	localizacao varchar2(50),
+	populacao varchar2(20),
 	constraint PK_CIVILIZACAO_VIVE_PLANETA primary key(civilizacao, planeta),
 	constraint FK_CIVILIZACAO foreign key(civilizacao) references Civilizacao(nome)
 		on update cascade on delete cascade,
@@ -144,8 +144,8 @@ create table Civilizacao_vive_Planeta(
 -- Essa tabela não foi nomeada somente de 'Natural', pois esta é uma palavra reservada
 create table Recurso_Natural(
 	planeta int not null,
-	recurso varchar(9) not null,
-	tipo varchar(20),
+	recurso varchar2(9) not null,
+	tipo varchar2(20),
 	constraint PK_NATURAL primary key(planeta, recurso),
 	constraint FK_NATURAL_RECURSO foreign key(planeta, recurso) references Recurso(planeta, codigo)
 		on update cascade on delete cascade
@@ -154,11 +154,11 @@ create table Recurso_Natural(
 ------------------------------------------- MINERAL -------------------------------------------
 create table Mineral(
 	planeta int not null,
-	recurso varchar(9) not null,
-	composicao varchar(255),
-	pureza varchar(50),
-	cor varchar(50),
-	dureza varchar(50),
+	recurso varchar2(9) not null,
+	composicao varchar2(255),
+	pureza varchar2(50),
+	cor varchar2(50),
+	dureza varchar2(50),
 	constraint PK_MINERAL primary key(planeta, recurso),
 	constraint FK_MINERAL_NATURAL foreign key(planeta, recurso) 
 		references Recurso_Natural(planeta, recurso)
@@ -168,11 +168,11 @@ create table Mineral(
 ------------------------------------------- ANIMAL --------------------------------------------
 create table Animal(
 	planeta int not null,
-	recurso varchar(9) not null,
-	especie varchar(100),
-	bioma varchar(100),
-	dieta varchar(100),
-	nivel_ameaca varchar(20),
+	recurso varchar2(9) not null,
+	especie varchar2(100),
+	bioma varchar2(100),
+	dieta varchar2(100),
+	nivel_ameaca varchar2(20),
 	constraint PK_ANIMAL primary key(planeta, recurso),
 	constraint FK_ANIMAL_NATURAL foreign key(planeta, recurso) 
 		references Recurso_Natural(planeta, recurso)
@@ -182,11 +182,11 @@ create table Animal(
 ------------------------------------------- VEGETAL -------------------------------------------
 create table Vegetal(
 	planeta int not null,
-	recurso varchar(9) not null,
-	toxicidade varchar(20),
-	bioma varchar(100),
-	utilizacao varchar(255),
-	propriedades_medicinais varchar(255),
+	recurso varchar2(9) not null,
+	toxicidade varchar2(20),
+	bioma varchar2(100),
+	utilizacao varchar2(255),
+	propriedades_medicinais varchar2(255),
 	constraint PK_VEGETAL primary key(planeta, recurso),
 	constraint FK_VEGETAL_NATURAL foreign key(planeta, recurso) 
 		references Recurso_Natural(planeta, recurso)
@@ -197,7 +197,7 @@ create table Vegetal(
 -- Essa tabela foi nomeada como 'Recurso_Tecnologico' para manter o padrão da tabela 'Recurso_Natural'
 create table Recurso_Tecnologico(
 	planeta int not null,
-	recurso varchar(9) not null,
+	recurso varchar2(9) not null,
 	constraint PK_TECNOLOGICO primary key(planeta, recurso),
 	constraint FK_TECNOLOGICO_RECURSO foreign key(planeta, recurso) references Recurso(planeta, codigo)
 		on update cascade on delete cascade
@@ -206,8 +206,8 @@ create table Recurso_Tecnologico(
 -------------------------------------- TIPO_TECNOLOGICO ---------------------------------------
 create table Tipo_Tecnologico(
 	planeta int not null,
-	recurso varchar(9) not null,
-	tipo varchar(20) not null,
+	recurso varchar2(9) not null,
+	tipo varchar2(20) not null,
 	constraint PK_TIPO_TECNOLOGICO primary key(planeta, recurso, tipo),
 	constraint FK_RECURSO_TECNOLOGICO foreign key(planeta, recurso) 
 		references Recurso_Tecnologico(planeta, recurso)
@@ -217,11 +217,11 @@ create table Tipo_Tecnologico(
 ------------------------------------------- MILITAR -------------------------------------------
 create table Militar(
 	planeta int not null,
-	recurso varchar(9) not null,
-	capacidade_dano varchar(20),
-	fonte_energia varchar(50),
-	alcance varchar(50),
-	modo_operacao varchar(22),
+	recurso varchar2(9) not null,
+	capacidade_dano varchar2(20),
+	fonte_energia varchar2(50),
+	alcance varchar2(50),
+	modo_operacao varchar2(22),
 	constraint PK_MILITAR primary key(planeta, recurso),
 	constraint FK_MILITAR_TECNOLOGICO foreign key(planeta, recurso)
 		references Recurso_Tecnologico(planeta, recurso)
@@ -232,11 +232,11 @@ create table Militar(
 ------------------------------------------- MEDICA --------------------------------------------
 create table Medica(
 	planeta int not null,
-	recurso varchar(9) not null,
-	finalidade varchar(255),
-	funcionamento varchar(255),
-	compatibilidade_fisiologica varchar(255),
-	efeitos_colaterais varchar(255),
+	recurso varchar2(9) not null,
+	finalidade varchar2(255),
+	funcionamento varchar2(255),
+	compatibilidade_fisiologica varchar2(255),
+	efeitos_colaterais varchar2(255),
 	constraint PK_MEDICA primary key(planeta, recurso),
 	constraint FK_MEDICA_TECNOLOGICO foreign key(planeta, recurso)
 		references Recurso_Tecnologico(planeta, recurso)
@@ -246,11 +246,11 @@ create table Medica(
 ---------------------------------------- COMPUTACIONAL ----------------------------------------
 create table Computacional(
 	planeta int not null,
-	recurso varchar(9) not null,
-	capacidade_processamento varchar(20),
-	consumo_energetico varchar(20),
-	sistema_operacional varchar(100),
-	aplicacoes_principais varchar(255),
+	recurso varchar2(9) not null,
+	capacidade_processamento varchar2(20),
+	consumo_energetico varchar2(20),
+	sistema_operacional varchar2(100),
+	aplicacoes_principais varchar2(255),
 	constraint PK_COMPUTACIONAL primary key(planeta, recurso),
 	constraint FK_COMPUTACIONAL_TECNOLOGICO foreign key(planeta, recurso)
 		references Recurso_Tecnologico(planeta, recurso)
@@ -260,9 +260,9 @@ create table Computacional(
 ------------------------------------- TECNOLOGICO_NATURAL -------------------------------------
 create table Tecnologico_Natural(
 	planeta_tec int not null,
-	recurso_tec varchar(9) not null,
+	recurso_tec varchar2(9) not null,
 	planeta_nat int not null,
-	recurso_nat varchar(9) not null,
+	recurso_nat varchar2(9) not null,
 	constraint PK_TECNOLOGICO_NATURAL primary key(planeta_tec, recurso_tec, planeta_nat, recurso_nat),
 	constraint FK_RECURSO_TECNOLOGICO foreign key(planeta_tec, recurso_tec)
 		references Recurso_Tecnologico(planeta, recurso)
@@ -274,9 +274,9 @@ create table Tecnologico_Natural(
 
 ---------------------------------------- PROCESSAMENTO ----------------------------------------
 create table Processamento(
-	civilizacao varchar(100) not null,
+	civilizacao varchar2(100) not null,
 	planeta int not null,
-	recurso_tecnologico varchar(9) not null,
+	recurso_tecnologico varchar2(9) not null,
 	constraint PK_PROCESSAMENTO primary key(civilizacao, planeta, recurso_tecnologico),
 	constraint FK_PROCESSAMENTO_CIVILIZACAO foreign key(civilizacao) references Civilizacao(nome)
 		on update cascade on delete cascade,
