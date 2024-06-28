@@ -129,7 +129,7 @@ def listar(conexao):
     imprimir_stargates(stargate_infos)
 
 
-def imprimir_stargates(stargate_infos, fields=None):
+def imprimir_stargates(stargate_infos):
     tabela = PrettyTable()
     tabela.field_names = ["Endereço","Nome do Planeta", "ID Planeta", "Status",]
 
