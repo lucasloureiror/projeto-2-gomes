@@ -78,7 +78,7 @@ def processar_escolha(escolha, conexao):
             return
 
         valor = input(f"Digite o valor para {parametro}: ")
-        if parametro is not "endereco":
+        if parametro != "endereco":
             valor = m.verificar_int(valor)
         buscar(conexao, parametro, valor)
     elif escolha == 3:
