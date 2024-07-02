@@ -48,6 +48,6 @@ def limpar_tela():
 def verificar_int(valor):
     try:
         valor = int(valor)
-        return valor
-    except ValueError:
+        
+    finally:
         return valor
